@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ToDo</string>
+    <string name="et_new_item_hint">What do you want to do?</string>
+    <string name="btn_add_item_label">Add Item</string>
 </resources>
