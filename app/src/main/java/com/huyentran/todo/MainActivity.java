@@ -8,12 +8,19 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
-    ListView lvItems;
+    private ArrayList<String> items;
+    private ArrayAdapter<String> itemsAdapter;
+    private ListView lvItems;
+
+    private static final String EMPTY_STRING = "";
+    private static final String TODO_FILE = "todo.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +28,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<>();
+        readItems();
         itemsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_expandable_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
-        items.add("First Item");
-        items.add("Second Item");
         setupListViewListener();
     }
 
@@ -37,9 +43,13 @@ public class MainActivity extends AppCompatActivity {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
         itemsAdapter.add(itemText);
-        etNewItem.setText("");
+        etNewItem.setText(EMPTY_STRING);
+        writeItems();
     }
 
+    /**
+     * Adds a listener for long item clicks that removes items.
+     */
     private void setupListViewListener() {
         lvItems.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
@@ -48,9 +58,36 @@ public class MainActivity extends AppCompatActivity {
                                                    long id) {
                         items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
+                        writeItems();
                         return true;
                     }
                 }
         );
+    }
+
+    /**
+     * Reads a new line delimited list of items from a file.
+     */
+    private void readItems() {
+        File filesDir = getFilesDir();
+        File todoFile = new File(filesDir, TODO_FILE);
+        try {
+            items = new ArrayList<>(FileUtils.readLines(todoFile));
+        } catch (IOException e) {
+            items = new ArrayList<>();
+        }
+    }
+
+    /**
+     * Writes a new line delimeted list of items to a file.
+     */
+    private void writeItems() {
+        File filesDir = getFilesDir();
+        File todoFile = new File(filesDir, TODO_FILE);
+        try {
+            FileUtils.writeLines(todoFile, items);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
