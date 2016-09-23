@@ -17,10 +17,11 @@ public class EditItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-        pos = getIntent().getExtras().getInt("pos");
-        String oldValue = getIntent().getStringExtra("value");
+        pos = getIntent().getExtras().getInt(POS_KEY);
+        String oldValue = getIntent().getStringExtra(VALUE_KEY);
         EditText etEditItem = (EditText) findViewById(R.id.etEditItem);
         etEditItem.setText(oldValue);
+        etEditItem.setSelection(oldValue.length());
     }
 
     /**
