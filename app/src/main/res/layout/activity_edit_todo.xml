@@ -8,16 +8,16 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.huyentran.todo.EditItemActivity">
+    tools:context="com.huyentran.todo.EditTodoActivity">
 
     <TextView
-        android:text="@string/tv_edit_item_label"
+        android:text="@string/tv_edit_todo_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/tvEditItem"
+        android:id="@+id/tvEditTodo"
         android:textSize="24sp"
         android:textStyle="normal|bold"
         android:textColor="@android:color/black" />
@@ -28,8 +28,8 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:layout_marginTop="15dp"
-        android:id="@+id/etEditItem"
-        android:layout_below="@+id/tvEditItem"
+        android:id="@+id/etEditTodo"
+        android:layout_below="@+id/tvEditTodo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -39,8 +39,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnEditSave"
         android:layout_marginTop="15dp"
-        android:layout_below="@+id/etEditItem"
+        android:layout_below="@+id/etEditTodo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="onSubmit" />
+        android:onClick="onSaveTodo" />
 </RelativeLayout>

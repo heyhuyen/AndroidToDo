@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ToDo</string>
-    <string name="et_new_item_hint">What do you want to do?</string>
-    <string name="btn_add_item_label">Add Item</string>
-    <string name="tv_edit_item_label">Edit Item Below:</string>
+    <string name="et_new_todo_hint">What do you want to do?</string>
+    <string name="btn_add_label">Add</string>
+    <string name="tv_edit_todo_label">Edit ToDo Below:</string>
     <string name="btn_save">Save</string>
 </resources>

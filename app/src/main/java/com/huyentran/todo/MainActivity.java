@@ -9,69 +9,70 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String POS_KEY = "pos";
-    public static final String VALUE_KEY = "value";
+    public static final String TODO_POS_KEY = "todo_pos";
+    public static final String TODO_ID_KEY = "todo_id";
+    public static final String TODO_VALUE_KEY = "todo_value";
 
     private static final String EMPTY_STRING = "";
-    private static final String TODO_FILE = "todo.txt";
     private static final int REQUEST_CODE = 5;
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
-    private ListView lvItems;
+    private ArrayList<Todo> todos;
+    private ArrayAdapter<Todo> todosAdapter;
+    private ListView lvTodos;
+    private TodoDatabaseHelper todoDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<>();
-        readItems();
-        itemsAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
+        todoDatabaseHelper = TodoDatabaseHelper.getInstance(this);
+        lvTodos = (ListView) findViewById(R.id.lvTodos);
+        initTodos();
+        todosAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_expandable_list_item_1, todos);
+        lvTodos.setAdapter(todosAdapter);
         setupListViewListeners();
     }
 
     /**
-     * Handler method for Add Item button.
+     * Handler method for Add todo button.
      * @param view
      */
-    public void onAddItem(View view) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
+    public void onAddTodo(View view) {
+        EditText etNewTodo = (EditText) findViewById(R.id.etNewTodo);
+        String value = etNewTodo.getText().toString();
         // todo: check for blank values
-        itemsAdapter.add(itemText);
-        etNewItem.setText(EMPTY_STRING);
-        writeItems();
+        Todo newTodo = new Todo(value);
+        todosAdapter.add(newTodo);
+        etNewTodo.setText(EMPTY_STRING);
+        todoDatabaseHelper.addTodo(newTodo);
     }
 
     /**
-     * Launches the EditItemActivity.
+     * Launches the EditTodoActivity.
      */
     public void launchEditView(int pos) {
-        String value = items.get(pos);
-        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-        intent.putExtra(POS_KEY, pos);
-        intent.putExtra(VALUE_KEY, value);
+        Todo todo = todos.get(pos);
+        Intent intent = new Intent(MainActivity.this, EditTodoActivity.class);
+        intent.putExtra(TODO_POS_KEY, pos);
+        intent.putExtra(TODO_ID_KEY, todo.id);
+        intent.putExtra(TODO_VALUE_KEY, todo.value);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            int pos = data.getExtras().getInt(POS_KEY);
-            String newValue = data.getExtras().getString(VALUE_KEY);
-            items.set(pos, newValue);
-            itemsAdapter.notifyDataSetChanged();
-            writeItems();
+            int todoPos = data.getExtras().getInt(TODO_POS_KEY);
+            long todoId = data.getExtras().getLong(TODO_ID_KEY);
+            String newValue = data.getExtras().getString(TODO_VALUE_KEY);
+            Todo updatedTodo = new Todo(todoId, newValue);
+            todos.set(todoPos, updatedTodo);
+            todosAdapter.notifyDataSetChanged();
+            todoDatabaseHelper.updateTask(updatedTodo);
         }
     }
 
@@ -79,22 +80,23 @@ public class MainActivity extends AppCompatActivity {
      * Adds listeners to the list view: item click and long item clicks for editing and removing.
      */
     private void setupListViewListeners() {
-        // long click listener for removing items
-        lvItems.setOnItemLongClickListener(
+        // long click listener for removing todos
+        lvTodos.setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos,
                                                    long id) {
-                        items.remove(pos);
-                        itemsAdapter.notifyDataSetChanged();
-                        writeItems();
+                        long taskId = todos.get(pos).id;
+                        todos.remove(pos);
+                        todosAdapter.notifyDataSetChanged();
+                        todoDatabaseHelper.deleteTask(taskId);
                         return true;
                     }
                 }
         );
 
-        // short click listener for editing items
-        lvItems.setOnItemClickListener(
+        // short click listener for editing todos
+        lvTodos.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
@@ -105,28 +107,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Reads a new line delimited list of items from a file.
+     * Initialize todo list and load existing todos from database.
      */
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, TODO_FILE);
-        try {
-            items = new ArrayList<>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<>();
-        }
-    }
-
-    /**
-     * Writes a new line delimited list of items to a file.
-     */
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, TODO_FILE);
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void initTodos() {
+        todos = new ArrayList<>();
+        todos.addAll(todoDatabaseHelper.getAllTodos());
     }
 }
