@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 5;
 
     private ArrayList<Todo> todos;
-    private ArrayAdapter<Todo> todosAdapter;
+    private TodosAdapter todosAdapter;
     private ListView lvTodos;
     private TodoDatabaseHelper todoDatabaseHelper;
 
@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
         todoDatabaseHelper = TodoDatabaseHelper.getInstance(this);
         lvTodos = (ListView) findViewById(R.id.lvTodos);
         initTodos();
-        todosAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1, todos);
+        todosAdapter = new TodosAdapter(this, todos);
         lvTodos.setAdapter(todosAdapter);
         setupListViewListeners();
     }
