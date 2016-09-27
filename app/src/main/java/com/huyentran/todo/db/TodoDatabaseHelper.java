@@ -1,4 +1,4 @@
-package com.huyentran.todo;
+package com.huyentran.todo.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.huyentran.todo.model.Todo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +123,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             ContentValues values = new ContentValues();
-            values.put(KEY_TODO_VALUE, todo.value);
+            values.put(KEY_TODO_VALUE, todo.getValue());
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_TODOS, null, values);
@@ -141,10 +143,10 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_TODO_VALUE, todo.value);
+        values.put(KEY_TODO_VALUE, todo.getValue());
 
         return db.update(TABLE_TODOS, values, KEY_TODO_VALUE + " = ?",
-                new String[] { String.valueOf(todo.id) });
+                new String[] { String.valueOf(todo.getId()) });
     }
 
     /**

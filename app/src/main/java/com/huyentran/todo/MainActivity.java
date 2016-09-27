@@ -5,9 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.huyentran.todo.db.TodoDatabaseHelper;
+import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.view.TodosAdapter;
 
 import java.util.ArrayList;
 
@@ -57,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         Todo todo = todos.get(pos);
         Intent intent = new Intent(MainActivity.this, EditTodoActivity.class);
         intent.putExtra(TODO_POS_KEY, pos);
-        intent.putExtra(TODO_ID_KEY, todo.id);
-        intent.putExtra(TODO_VALUE_KEY, todo.value);
+        intent.putExtra(TODO_ID_KEY, todo.getId());
+        intent.putExtra(TODO_VALUE_KEY, todo.getValue());
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos,
                                                    long id) {
-                        long taskId = todos.get(pos).id;
+                        long taskId = todos.get(pos).getId();
                         todos.remove(pos);
                         todosAdapter.notifyDataSetChanged();
                         todoDatabaseHelper.deleteTask(taskId);
