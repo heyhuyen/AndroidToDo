@@ -4,4 +4,5 @@
     <string name="btn_add_label">Add</string>
     <string name="tv_edit_todo_label">Edit ToDo Below:</string>
     <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
 </resources>

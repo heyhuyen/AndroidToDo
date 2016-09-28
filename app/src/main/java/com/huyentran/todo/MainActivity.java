@@ -1,6 +1,6 @@
 package com.huyentran.todo;
 
-import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +14,15 @@ import com.huyentran.todo.view.TodosAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * The main activity for the Todo app.
+ */
+public class MainActivity extends AppCompatActivity implements EditTodoDialogFragment.EditTodoDialogListener{
     public static final String TODO_POS_KEY = "todo_pos";
     public static final String TODO_ID_KEY = "todo_id";
     public static final String TODO_VALUE_KEY = "todo_value";
 
     private static final String EMPTY_STRING = "";
-    private static final int REQUEST_CODE = 5;
 
     private ArrayList<Todo> todos;
     private TodosAdapter todosAdapter;
@@ -48,34 +50,28 @@ public class MainActivity extends AppCompatActivity {
         String value = etNewTodo.getText().toString();
         // todo: check for blank values
         Todo newTodo = new Todo(value);
+        long id = todoDatabaseHelper.addTodo(newTodo);
+        newTodo.setId(id);
         todosAdapter.add(newTodo);
         etNewTodo.setText(EMPTY_STRING);
-        todoDatabaseHelper.addTodo(newTodo);
-    }
-
-    /**
-     * Launches the EditTodoActivity.
-     */
-    public void launchEditView(int pos) {
-        Todo todo = todos.get(pos);
-        Intent intent = new Intent(MainActivity.this, EditTodoActivity.class);
-        intent.putExtra(TODO_POS_KEY, pos);
-        intent.putExtra(TODO_ID_KEY, todo.getId());
-        intent.putExtra(TODO_VALUE_KEY, todo.getValue());
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            int todoPos = data.getExtras().getInt(TODO_POS_KEY);
-            long todoId = data.getExtras().getLong(TODO_ID_KEY);
-            String newValue = data.getExtras().getString(TODO_VALUE_KEY);
-            Todo updatedTodo = new Todo(todoId, newValue);
-            todos.set(todoPos, updatedTodo);
-            todosAdapter.notifyDataSetChanged();
-            todoDatabaseHelper.updateTask(updatedTodo);
-        }
+    public void onFinishEditDialog(int pos, long id, String value) {
+        Todo updatedTodo = new Todo(id, value);
+        todos.set(pos, updatedTodo);
+        todosAdapter.notifyDataSetChanged();
+        todoDatabaseHelper.updateTodo(updatedTodo);
+    }
+
+    /**
+     * Launches a dialog for editing the todo item for the given position.
+     */
+    private void showEditDialog(int pos) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditTodoDialogFragment editTodoDialogFragment =
+                EditTodoDialogFragment.newInstance(pos, todos.get(pos));
+        editTodoDialogFragment.show(fm, "fragment_edit_todo");
     }
 
     /**
@@ -88,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapter, View view, int pos,
                                                    long id) {
-                        long taskId = todos.get(pos).getId();
+                        long todoId = todos.get(pos).getId();
                         todos.remove(pos);
                         todosAdapter.notifyDataSetChanged();
-                        todoDatabaseHelper.deleteTask(taskId);
+                        todoDatabaseHelper.deleteTodo(todoId);
                         return true;
                     }
                 }
@@ -102,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
-                        launchEditView(pos);
+                        showEditDialog(pos);
                     }
                 }
         );

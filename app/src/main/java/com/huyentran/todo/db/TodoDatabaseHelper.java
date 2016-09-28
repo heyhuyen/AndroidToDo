@@ -114,38 +114,40 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
      * Persist given {@link Todo} to the database.
      * @param todo todo to persist
      */
-    public void addTodo(Todo todo) {
+    public long addTodo(Todo todo) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
 
         // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
         // consistency of the database.
         db.beginTransaction();
+        long id = -1;
         try {
             ContentValues values = new ContentValues();
             values.put(KEY_TODO_VALUE, todo.getValue());
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
-            db.insertOrThrow(TABLE_TODOS, null, values);
+            id = db.insertOrThrow(TABLE_TODOS, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d(TAG, "Error while trying to add todo to database");
         } finally {
             db.endTransaction();
         }
+        return id;
     }
 
     /**
      * Update given {@link Todo}
      * @param todo todo to update
      */
-    public int updateTask(Todo todo) {
+    public int updateTodo(Todo todo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_TODO_VALUE, todo.getValue());
 
-        return db.update(TABLE_TODOS, values, KEY_TODO_VALUE + " = ?",
+        return db.update(TABLE_TODOS, values, KEY_TODO_ID + " = ?",
                 new String[] { String.valueOf(todo.getId()) });
     }
 
@@ -153,7 +155,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
      * Delete {@link Todo} for the given primary key id from the database.
      * @param id primary key
      */
-    public void deleteTask(long id) {
+    public void deleteTodo(long id) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
