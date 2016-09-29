@@ -16,6 +16,7 @@ import com.huyentran.todo.model.Todo;
 public class ItemView extends RelativeLayout {
     private TextView tvId;
     private TextView tvValue;
+    private TextView tvDueDate;
 
     public ItemView(Context c) {
         this(c, null);
@@ -39,6 +40,10 @@ public class ItemView extends RelativeLayout {
     public void setItem(Todo item) {
         tvId.setText(String.valueOf(item.getId()));
         tvValue.setText(item.getValue());
+        String dueDate = item.getDueDate();
+        if (dueDate != null && !dueDate.isEmpty()) {
+            tvDueDate.setText(dueDate);
+        }
     }
 
     public TextView getIdTextView() {
@@ -49,8 +54,13 @@ public class ItemView extends RelativeLayout {
         return tvValue;
     }
 
+    public TextView getDueDateTextView() {
+        return tvDueDate;
+    }
+
     private void setupChildren() {
         tvId = (TextView) findViewById(R.id.tvId);
         tvValue = (TextView) findViewById(R.id.tvValue);
+        tvDueDate = (TextView) findViewById(R.id.tvDueDate);
     }
 }

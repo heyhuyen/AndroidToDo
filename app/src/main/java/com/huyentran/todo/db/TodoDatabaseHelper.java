@@ -19,7 +19,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "todoDatabase";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Table Names
     private static final String TABLE_TODOS = "todos";
@@ -27,6 +27,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
     // Post Table Columns
     private static final String KEY_TODO_ID = "id";
     private static final String KEY_TODO_VALUE = "value";
+    private static final String KEY_TODO_DUE_DATE = "due_date";
 
     public static synchronized TodoDatabaseHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -61,7 +62,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
         String CREATE_POSTS_TABLE = "CREATE TABLE " + TABLE_TODOS +
                 "(" +
                 KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_TODO_VALUE + " TEXT" +
+                KEY_TODO_VALUE + " TEXT," +
+                KEY_TODO_DUE_DATE + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_POSTS_TABLE);
@@ -97,7 +99,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     long id = cursor.getLong(cursor.getColumnIndex(KEY_TODO_ID));
                     String value = cursor.getString(cursor.getColumnIndex(KEY_TODO_VALUE));
-                    todos.add(new Todo(id, value));
+                    String dueDate = cursor.getString(cursor.getColumnIndex(KEY_TODO_DUE_DATE));
+                    todos.add(new Todo(id, value, dueDate));
                 } while(cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -146,6 +149,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_TODO_VALUE, todo.getValue());
+        values.put(KEY_TODO_DUE_DATE, todo.getDueDate());
 
         return db.update(TABLE_TODOS, values, KEY_TODO_ID + " = ?",
                 new String[] { String.valueOf(todo.getId()) });

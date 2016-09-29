@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="match_parent">
 
     <TextView
@@ -16,5 +16,17 @@
         android:layout_height="wrap_content"
         android:text="Id"
         android:textSize="12sp"
-        android:textStyle="normal|italic" />
-</LinearLayout>
+        android:textStyle="normal|italic"
+        android:layout_below="@+id/tvValue" />
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:id="@+id/tvDueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="normal|italic"
+        android:layout_below="@+id/tvValue"
+        android:layout_toRightOf="@+id/tvId"
+        android:layout_marginLeft="5dp"/>
+</RelativeLayout>

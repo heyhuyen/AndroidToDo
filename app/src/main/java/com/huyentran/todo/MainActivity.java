@@ -1,5 +1,6 @@
 package com.huyentran.todo;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements EditTodoDialogFra
     public static final String TODO_POS_KEY = "todo_pos";
     public static final String TODO_ID_KEY = "todo_id";
     public static final String TODO_VALUE_KEY = "todo_value";
+    public static final String TODO_DUE_DATE_KEY = "todo_due_date";
 
     private static final String EMPTY_STRING = "";
 
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements EditTodoDialogFra
     }
 
     @Override
-    public void onFinishEditDialog(int pos, long id, String value) {
-        Todo updatedTodo = new Todo(id, value);
+    public void onFinishEditDialog(int pos, long id, String value, String dueDate) {
+        Todo updatedTodo = new Todo(id, value, dueDate);
         todos.set(pos, updatedTodo);
         todosAdapter.notifyDataSetChanged();
         todoDatabaseHelper.updateTodo(updatedTodo);
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements EditTodoDialogFra
         FragmentManager fm = getSupportFragmentManager();
         EditTodoDialogFragment editTodoDialogFragment =
                 EditTodoDialogFragment.newInstance(pos, todos.get(pos));
+        editTodoDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
         editTodoDialogFragment.show(fm, "fragment_edit_todo");
     }
 
