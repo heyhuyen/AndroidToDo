@@ -5,4 +5,7 @@
     <string name="tv_edit_todo_label">Edit ToDo Below:</string>
     <string name="btn_save">Save</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="tv_due_date_label">Due date:</string>
+    <string name="tv_due_date_label_format">Due %s</string>
+    <string name="tv_today">today</string>
 </resources>

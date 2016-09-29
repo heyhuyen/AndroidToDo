@@ -13,10 +13,17 @@
         android:inputType="text"
         android:imeOptions="actionDone" />
 
-    <EditText
-        android:id="@+id/etEditDueDate"
+    <TextView
+        android:id="@+id/tvDueDateLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:text="@string/tv_due_date_label" />
+
+    android:layout_alignParentLeft="true"/>
+    <DatePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dpDueDate"
+        android:calendarViewShown="false" />
 
 </LinearLayout>

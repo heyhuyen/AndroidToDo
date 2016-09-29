@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.util.DateUtils;
+
+import java.util.Calendar;
 
 import static com.huyentran.todo.MainActivity.TODO_DUE_DATE_KEY;
 import static com.huyentran.todo.MainActivity.TODO_ID_KEY;
@@ -43,33 +47,27 @@ public class EditTodoDialogFragment extends DialogFragment {
         return fragment;
     }
 
-//    /** The system calls this to get the DialogFragment's layout, regardless
-//     of whether it's being displayed as a dialog or an embedded fragment. */
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_edit_todo, container, false);
-//    }
-
     /** The system calls this only when creating the layout in a dialog. */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-//        alertDialogBuilder.setTitle(getResources().getString(R.string.tv_edit_todo_label));
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         final View dialogView = inflater.inflate(R.layout.fragment_edit_todo, null);
         alertDialogBuilder.setView(dialogView);
+        Bundle args = getArguments();
         // Setup edit text field
         final EditText etValue = (EditText) dialogView.findViewById(R.id.etEditTodo);
-        String oldValue = getArguments().getString(TODO_VALUE_KEY);
-        etValue.setText(oldValue);
-        etValue.setSelection(oldValue.length());
-        final EditText etDueDate = (EditText) dialogView.findViewById(R.id.etEditDueDate);
-        String oldDueDate = getArguments().getString(TODO_DUE_DATE_KEY);
-        etDueDate.setText(oldDueDate);
+        String value = args.getString(TODO_VALUE_KEY);
+        etValue.setText(value);
+        etValue.setSelection(value.length());
+        // Setup date picker
+        final DatePicker dpDueDate = (DatePicker) dialogView.findViewById(R.id.dpDueDate);
+        Calendar dueDate = DateUtils.getDateFromString(args.getString(TODO_DUE_DATE_KEY));
+        dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
+                dueDate.get(Calendar.DAY_OF_MONTH));
         // Wiring buttons
         alertDialogBuilder.setPositiveButton(R.string.btn_save, new DialogInterface.OnClickListener() {
                 @Override
@@ -80,7 +78,7 @@ public class EditTodoDialogFragment extends DialogFragment {
                     listener.onFinishEditDialog(args.getInt(TODO_POS_KEY),
                             args.getLong(TODO_ID_KEY),
                             etValue.getText().toString(),
-                            etDueDate.getText().toString());
+                            DateUtils.getDateStringFromPicker(dpDueDate));
                     // Close the dialog and return back to the parent activity
                     dismiss();
                 }

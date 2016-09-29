@@ -1,6 +1,8 @@
 package com.huyentran.todo.view;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,12 +11,15 @@ import android.widget.TextView;
 
 import com.huyentran.todo.R;
 import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.util.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Custom ListView row.
  */
 public class ItemView extends RelativeLayout {
-    private TextView tvId;
     private TextView tvValue;
     private TextView tvDueDate;
 
@@ -38,16 +43,22 @@ public class ItemView extends RelativeLayout {
     }
 
     public void setItem(Todo item) {
-        tvId.setText(String.valueOf(item.getId()));
         tvValue.setText(item.getValue());
-        String dueDate = item.getDueDate();
-        if (dueDate != null && !dueDate.isEmpty()) {
-            tvDueDate.setText(dueDate);
+        String dueDateStr = item.getDueDate();
+        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+            Calendar dueDate = DateUtils.getDateFromString(dueDateStr);
+            String dueDateText = dueDateStr;
+            // check if date is past due or today
+            if (DateUtils.isPast(dueDate)) {
+                tvDueDate.setTextColor(Color.RED);
+            } else if (DateUtils.isToday(dueDate)) {
+                dueDateText = getResources().getString(R.string.tv_today);
+                tvDueDate.setTextColor(Color.GREEN);
+            } else {
+                tvDueDate.setTextColor(Color.DKGRAY);
+            }
+            tvDueDate.setText(String.format(getResources().getString(R.string.tv_due_date_label_format), dueDateText));
         }
-    }
-
-    public TextView getIdTextView() {
-        return tvId;
     }
 
     public TextView getValueTextView() {
@@ -59,7 +70,6 @@ public class ItemView extends RelativeLayout {
     }
 
     private void setupChildren() {
-        tvId = (TextView) findViewById(R.id.tvId);
         tvValue = (TextView) findViewById(R.id.tvValue);
         tvDueDate = (TextView) findViewById(R.id.tvDueDate);
     }
