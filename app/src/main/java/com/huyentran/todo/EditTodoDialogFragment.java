@@ -10,26 +10,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.huyentran.todo.model.Todo;
 import com.huyentran.todo.util.DateUtils;
 
 import java.util.Calendar;
 
-import static com.huyentran.todo.MainActivity.TODO_DUE_DATE_KEY;
-import static com.huyentran.todo.MainActivity.TODO_ID_KEY;
-import static com.huyentran.todo.MainActivity.TODO_POS_KEY;
-import static com.huyentran.todo.MainActivity.TODO_VALUE_KEY;
+import static com.huyentran.todo.util.Constants.TODO_DUE_DATE_KEY;
+import static com.huyentran.todo.util.Constants.TODO_ID_KEY;
+import static com.huyentran.todo.util.Constants.TODO_NOTES_KEY;
+import static com.huyentran.todo.util.Constants.TODO_POS_KEY;
+import static com.huyentran.todo.util.Constants.TODO_PRIORITY_KEY;
+import static com.huyentran.todo.util.Constants.TODO_VALUE_KEY;
 
 /**
  * {@link DialogFragment} using {@link AlertDialog} for editing todo items in a modal view.
  */
-public class EditTodoDialogFragment extends DialogFragment {
+public class EditTodoDialogFragment extends DialogFragment
+{
 
     public interface EditTodoDialogListener {
-        void onFinishEditDialog(int pos, long id, String value, String dueDate, boolean status);
+        void onFinishEditDialog(int pos, Todo todo);
     }
 
     public EditTodoDialogFragment() {
@@ -43,6 +48,8 @@ public class EditTodoDialogFragment extends DialogFragment {
         args.putLong(TODO_ID_KEY, todo.getId());
         args.putString(TODO_VALUE_KEY, todo.getValue());
         args.putString(TODO_DUE_DATE_KEY, todo.getDueDate());
+        args.putString(TODO_NOTES_KEY, todo.getNotes());
+        args.putInt(TODO_PRIORITY_KEY, todo.getPriority());
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,16 +65,31 @@ public class EditTodoDialogFragment extends DialogFragment {
         final View dialogView = inflater.inflate(R.layout.fragment_edit_todo, null);
         alertDialogBuilder.setView(dialogView);
         Bundle args = getArguments();
+
         // Setup edit text field
         final EditText etValue = (EditText) dialogView.findViewById(R.id.etEditTodo);
         String value = args.getString(TODO_VALUE_KEY);
         etValue.setText(value);
         etValue.setSelection(value.length());
+
         // Setup date picker
         final DatePicker dpDueDate = (DatePicker) dialogView.findViewById(R.id.dpDueDate);
         Calendar dueDate = DateUtils.getDateFromString(args.getString(TODO_DUE_DATE_KEY));
         dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
                 dueDate.get(Calendar.DAY_OF_MONTH));
+
+        // Setup notes field
+        final EditText etNotes = (EditText) dialogView.findViewById(R.id.etTodoNotes);
+        etNotes.setText(args.getString(TODO_NOTES_KEY));
+
+        // setup priority spinner
+        final Spinner spPriority = (Spinner) dialogView.findViewById(R.id.spPriority);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.priority_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPriority.setAdapter(adapter);
+        spPriority.setSelection(args.getInt(TODO_PRIORITY_KEY));
+
         // Wiring buttons
         alertDialogBuilder.setPositiveButton(R.string.btn_save, new DialogInterface.OnClickListener() {
                 @Override
@@ -75,11 +97,14 @@ public class EditTodoDialogFragment extends DialogFragment {
                     // Return input text back to activity through the implemented listener
                     EditTodoDialogListener listener = (EditTodoDialogListener) getActivity();
                     Bundle args = getArguments();
-                    listener.onFinishEditDialog(args.getInt(TODO_POS_KEY),
-                            args.getLong(TODO_ID_KEY),
-                            etValue.getText().toString(),
-                            DateUtils.getDateStringFromPicker(dpDueDate),
-                            false);
+                    Todo todo = new Todo.TodoBuilder(etValue.getText().toString())
+                            .id(args.getLong(TODO_ID_KEY))
+                            .dueDate(DateUtils.getDateStringFromPicker(dpDueDate))
+                            .status(false)
+                            .notes(etNotes.getText().toString())
+                            .priority(spPriority.getSelectedItemPosition())
+                            .build();
+                    listener.onFinishEditDialog(args.getInt(TODO_POS_KEY), todo);
                     // Close the dialog and return back to the parent activity
                     dismiss();
                 }

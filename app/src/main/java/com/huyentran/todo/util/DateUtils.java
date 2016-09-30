@@ -16,7 +16,8 @@ public final class DateUtils {
     private DateUtils() {}
 
     /**
-     * Get a {@link} Calendar from the given date string. If no date string is provided, defaults to now.
+     * Get a {@link} Calendar from the given date string. If the given date string is null or empty
+     * or otherwise cannot be parsed, the current date is returned by default.
      * @param dateStr yyyy-mm-dd formatted string
      * @return a calendar date
      */

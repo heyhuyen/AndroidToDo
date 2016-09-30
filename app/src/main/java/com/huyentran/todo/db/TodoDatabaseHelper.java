@@ -19,7 +19,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "todoDatabase";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Table Names
     private static final String TABLE_TODOS = "todos";
@@ -29,6 +29,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TODO_VALUE = "value";
     private static final String KEY_TODO_DUE_DATE = "due_date";
     private static final String KEY_TODO_STATUS = "status";
+    private static final String KEY_TODO_NOTES = "notes";
+    private static final String KEY_TODO_PRIORITY = "priority";
 
     public static synchronized TodoDatabaseHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -65,7 +67,9 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
                 KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
                 KEY_TODO_VALUE + " TEXT," +
                 KEY_TODO_DUE_DATE + " TEXT," +
-                KEY_TODO_STATUS + " INTEGER DEFAULT 0" + // 1: complete
+                KEY_TODO_STATUS + " INTEGER DEFAULT 0," + // 1: complete
+                KEY_TODO_NOTES + " TEXT," +
+                KEY_TODO_PRIORITY + " INTEGER DEFAULT 0" + // 0: low
                 ")";
 
         db.execSQL(CREATE_POSTS_TABLE);
@@ -103,7 +107,9 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
                     String value = cursor.getString(cursor.getColumnIndex(KEY_TODO_VALUE));
                     String dueDate = cursor.getString(cursor.getColumnIndex(KEY_TODO_DUE_DATE));
                     boolean status = cursor.getInt(cursor.getColumnIndex(KEY_TODO_STATUS)) == 1;
-                    todos.add(new Todo(id, value, dueDate, status));
+                    String notes = cursor.getString(cursor.getColumnIndex(KEY_TODO_NOTES));
+                    int priority = cursor.getInt(cursor.getColumnIndex(KEY_TODO_PRIORITY));
+                    todos.add(new Todo(id, value, dueDate, status, notes, priority));
                 } while(cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -154,6 +160,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TODO_VALUE, todo.getValue());
         values.put(KEY_TODO_DUE_DATE, todo.getDueDate());
         values.put(KEY_TODO_STATUS, todo.getStatus());
+        values.put(KEY_TODO_NOTES, todo.getNotes());
+        values.put(KEY_TODO_PRIORITY, todo.getPriority());
 
         return db.update(TABLE_TODOS, values, KEY_TODO_ID + " = ?",
                 new String[] { String.valueOf(todo.getId()) });

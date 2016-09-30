@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/cbStatus"
-        android:layout_alignBaseline="@id/cbStatus"/>
+        android:layout_alignBaseline="@id/cbStatus" />
 
     <TextView
         android:id="@+id/tvDueDate"
@@ -31,5 +31,14 @@
         android:textSize="12sp"
         android:textStyle="normal|italic"
         android:layout_below="@+id/cbStatus" />
+
+    <TextView
+        android:id="@+id/tvPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBaseline="@id/cbStatus" />
 
 </RelativeLayout>

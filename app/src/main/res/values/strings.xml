@@ -2,10 +2,20 @@
     <string name="app_name">ToDo</string>
     <string name="et_new_todo_hint">What do you want to do?</string>
     <string name="btn_add_label">Add</string>
-    <string name="tv_edit_todo_label">Edit ToDo Below:</string>
+    <string name="tv_edit_todo_label">Todo:</string>
     <string name="btn_save">Save</string>
     <string name="btn_cancel">Cancel</string>
     <string name="tv_due_date_label">Due date:</string>
     <string name="tv_due_date_label_format">Due %s</string>
     <string name="tv_today">today</string>
+    <string name="tv_low">low</string>
+    <string name="tv_med">med</string>
+    <string name="tv_high">high</string>
+    <string name="tv_notes_label">Notes:</string>
+    <string name="tv_priority_label">Priority:</string>
+    <string-array name="priority_array">
+        <item>@string/tv_low</item>
+        <item>@string/tv_med</item>
+        <item>@string/tv_high</item>
+    </string-array>
 </resources>

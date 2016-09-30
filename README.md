@@ -4,7 +4,7 @@ Todo is an android app that allows building a todo list and basic todo items man
 
 Submitted by: Huyen Tran
 
-Time spent: 12 hours spent in total
+Time spent: 14 hours spent in total
 
 ## User Stories
 
@@ -20,12 +20,15 @@ The following **optional** features are implemented:
 * [x] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [x] Add support for completion due dates for todo items (and display within listview item)
 * [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
-* [ ] Add support for selecting the priority of each todo item (and display in listview item)
+* [x] Add support for selecting the priority of each todo item (and display in listview item)
 * [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
-* [x] Add support for todo item status (exposed via checkbox displayed within listview item)
+* [x] Add support for todo status
+** exposed via checkbox displayed within listview item
+** editing disabled for checked items (click does nothing, but long click to delete still enabled)
+* [x] Add notes field for todo item
 
 ## Video Walkthrough 
 

@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.huyentran.todo.db.TodoDatabaseHelper;
 import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.util.Constants;
 import com.huyentran.todo.view.ItemView;
 import com.huyentran.todo.view.TodosAdapter;
 
@@ -21,13 +22,6 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity
         implements EditTodoDialogFragment.EditTodoDialogListener, ItemView.ItemViewListener {
-    public static final String TODO_POS_KEY = "todo_pos";
-    public static final String TODO_ID_KEY = "todo_id";
-    public static final String TODO_VALUE_KEY = "todo_value";
-    public static final String TODO_DUE_DATE_KEY = "todo_due_date";
-    public static final String TODO_STATUS_KEY = "todo_status";
-
-    private static final String EMPTY_STRING = "";
 
     private ArrayList<Todo> todos;
     private TodosAdapter todosAdapter;
@@ -58,19 +52,14 @@ public class MainActivity extends AppCompatActivity
         long id = todoDatabaseHelper.addTodo(newTodo);
         newTodo.setId(id);
         todosAdapter.add(newTodo);
-        etNewTodo.setText(EMPTY_STRING);
+        etNewTodo.setText(Constants.EMPTY_STRING);
     }
 
     @Override
-    public void onFinishEditDialog(int pos, long id, String value, String dueDate, boolean status) {
-        Todo updatedTodo = new Todo.TodoBuilder(value)
-                .id(id)
-                .dueDate(dueDate)
-                .status(status)
-                .build();
-        todos.set(pos, updatedTodo);
+    public void onFinishEditDialog(int pos, Todo todo) {
+        todos.set(pos, todo);
         todosAdapter.notifyDataSetChanged();
-        todoDatabaseHelper.updateTodo(updatedTodo);
+        todoDatabaseHelper.updateTodo(todo);
     }
 
     /**

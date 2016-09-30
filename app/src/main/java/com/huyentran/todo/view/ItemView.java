@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.huyentran.todo.R;
 import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.util.Constants;
 import com.huyentran.todo.util.DateUtils;
 
 import java.util.Calendar;
@@ -23,6 +24,7 @@ public class ItemView extends RelativeLayout {
     private CheckBox cbStatus;
     private TextView tvValue;
     private TextView tvDueDate;
+    private TextView tvPriority;
 
     public interface ItemViewListener {
         void onItemViewCheckBoxToggle(int pos);
@@ -47,11 +49,21 @@ public class ItemView extends RelativeLayout {
                 .inflate(R.layout.item_view, parent, false);
     }
 
-    public void setItem(final int pos, Todo item, final ItemViewListener listener) {
-        // todo value
-        tvValue.setText(item.getValue());
+    public void setItem(int pos, Todo todo, ItemViewListener listener) {
+        tvValue.setText(todo.getValue());
+        setCheckBox(pos, todo, listener);
+        setDueDate(todo);
+        setPriority(todo);
+    }
 
-        // checkbox
+    private void setupChildren() {
+        tvValue = (TextView) findViewById(R.id.tvValue);
+        cbStatus = (CheckBox) findViewById(R.id.cbStatus);
+        tvDueDate = (TextView) findViewById(R.id.tvDueDate);
+        tvPriority = (TextView) findViewById(R.id.tvPriority);
+    }
+
+    private void setCheckBox(final int pos, Todo item, final ItemViewListener listener) {
         cbStatus.setChecked(item.getStatus());
         cbStatus.setOnClickListener(new OnClickListener() {
             @Override
@@ -59,36 +71,41 @@ public class ItemView extends RelativeLayout {
                 listener.onItemViewCheckBoxToggle(pos);
             }
         });
+    }
 
-        // due date
-        String dueDateStr = item.getDueDate();
-        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+    private void setDueDate(Todo todo) {
+        String dueDateStr = todo.getDueDate();
+        if (dueDateStr == null || dueDateStr.isEmpty()) {
+            tvDueDate.setText(Constants.EMPTY_STRING);
+        } else {
             Calendar dueDate = DateUtils.getDateFromString(dueDateStr);
-            String dueDateText = dueDateStr;
             // check if date is past due or today
             if (DateUtils.isPast(dueDate)) {
                 tvDueDate.setTextColor(Color.RED);
             } else if (DateUtils.isToday(dueDate)) {
-                dueDateText = getResources().getString(R.string.tv_today);
+                dueDateStr = getResources().getString(R.string.tv_today);
                 tvDueDate.setTextColor(Color.GREEN);
             } else {
                 tvDueDate.setTextColor(Color.DKGRAY);
             }
-            tvDueDate.setText(String.format(getResources().getString(R.string.tv_due_date_label_format), dueDateText));
+            tvDueDate.setText(String.format(getResources().getString(R.string.tv_due_date_label_format), dueDateStr));
         }
     }
 
-    public TextView getValueTextView() {
-        return tvValue;
-    }
-
-    public TextView getDueDateTextView() {
-        return tvDueDate;
-    }
-
-    private void setupChildren() {
-        tvValue = (TextView) findViewById(R.id.tvValue);
-        cbStatus = (CheckBox) findViewById(R.id.cbStatus);
-        tvDueDate = (TextView) findViewById(R.id.tvDueDate);
+    private void setPriority(Todo todo) {
+        switch (todo.getPriority()) {
+            case (Todo.PRIORITY_HI):
+                tvPriority.setText(getResources().getString(R.string.tv_high));
+                tvPriority.setTextColor(Color.RED);
+                break;
+            case (Todo.PRIORITY_MED):
+                tvPriority.setText(getResources().getString(R.string.tv_med));
+                tvPriority.setTextColor(Color.YELLOW);
+                break;
+            default:
+                tvPriority.setText(getResources().getString(R.string.tv_low));
+                tvPriority.setTextColor(Color.GREEN);
+                break;
+        }
     }
 }
