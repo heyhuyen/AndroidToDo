@@ -1,5 +1,10 @@
 package com.huyentran.todo.models;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Todo model.
  */
@@ -7,6 +12,11 @@ public class Todo {
     public static final int PRIORITY_LOW = 0;
     public static final int PRIORITY_MED = 1;
     public static final int PRIORITY_HI = 2;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ PRIORITY_LOW, PRIORITY_MED, PRIORITY_HI })
+
+    public @interface TodoPriorityDef { }
 
     private long id;
     private String value;
@@ -19,7 +29,7 @@ public class Todo {
         this.value = value;
     }
 
-    public Todo(long id, String value, String dueDate, boolean status, String notes, int priority) {
+    public Todo(long id, String value, String dueDate, boolean status, String notes, @TodoPriorityDef int priority) {
         this.id = id;
         this.value = value;
         this.dueDate = dueDate;
