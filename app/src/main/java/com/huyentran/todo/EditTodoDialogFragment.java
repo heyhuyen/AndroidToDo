@@ -13,19 +13,17 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.huyentran.todo.model.Todo;
 import com.huyentran.todo.util.DateUtils;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import static com.huyentran.todo.util.Constants.TODO_DUE_DATE_KEY;
-import static com.huyentran.todo.util.Constants.TODO_ID_KEY;
-import static com.huyentran.todo.util.Constants.TODO_NOTES_KEY;
-import static com.huyentran.todo.util.Constants.TODO_POS_KEY;
-import static com.huyentran.todo.util.Constants.TODO_PRIORITY_KEY;
-import static com.huyentran.todo.util.Constants.TODO_VALUE_KEY;
+import static com.huyentran.todo.util.Constants.*;
+import static com.huyentran.todo.util.DateUtils.getDateStringFromPicker;
 
 /**
  * {@link DialogFragment} using {@link AlertDialog} for editing todo items in a modal view.
@@ -72,11 +70,45 @@ public class EditTodoDialogFragment extends DialogFragment
         etValue.setText(value);
         etValue.setSelection(value.length());
 
-        // Setup date picker
+        // Setup due date items
+        final ImageButton btnAddDueDate = (ImageButton) dialogView.findViewById(R.id.btnAddDueDate);
+        final ImageButton btnRemoveDueDate = (ImageButton) dialogView.findViewById(R.id.btnRemoveDueDate);
         final DatePicker dpDueDate = (DatePicker) dialogView.findViewById(R.id.dpDueDate);
-        Calendar dueDate = DateUtils.getDateFromString(args.getString(TODO_DUE_DATE_KEY));
-        dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
-                dueDate.get(Calendar.DAY_OF_MONTH));
+        btnAddDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnAddDueDate.setVisibility(View.GONE);
+                btnRemoveDueDate.setVisibility(View.VISIBLE);
+                dpDueDate.setVisibility(View.VISIBLE);
+
+                // default to today
+                Calendar dueDate = new GregorianCalendar();
+                dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
+                        dueDate.get(Calendar.DAY_OF_MONTH));
+            }
+        });
+        btnRemoveDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnRemoveDueDate.setVisibility(View.GONE);
+                btnAddDueDate.setVisibility(View.VISIBLE);
+                dpDueDate.setVisibility(View.GONE);
+            }
+        });
+        String dueDateStr = args.getString(TODO_DUE_DATE_KEY);
+        if (dueDateStr == null) {
+            btnAddDueDate.setVisibility(View.VISIBLE);
+            btnRemoveDueDate.setVisibility(View.GONE);
+            dpDueDate.setVisibility(View.GONE);
+        } else {
+            btnAddDueDate.setVisibility(View.GONE);
+            btnRemoveDueDate.setVisibility(View.VISIBLE);
+            dpDueDate.setVisibility(View.VISIBLE);
+
+            Calendar dueDate = DateUtils.getDateFromString(dueDateStr);
+            dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
+                    dueDate.get(Calendar.DAY_OF_MONTH));
+        }
 
         // Setup notes field
         final EditText etNotes = (EditText) dialogView.findViewById(R.id.etTodoNotes);
@@ -90,21 +122,22 @@ public class EditTodoDialogFragment extends DialogFragment
         spPriority.setAdapter(adapter);
         spPriority.setSelection(args.getInt(TODO_PRIORITY_KEY));
 
-        // Wiring buttons
+        // alert dialog buttons
         alertDialogBuilder.setPositiveButton(R.string.btn_save, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Return input text back to activity through the implemented listener
                     EditTodoDialogListener listener = (EditTodoDialogListener) getActivity();
                     Bundle args = getArguments();
-                    Todo todo = new Todo.TodoBuilder(etValue.getText().toString())
+                    Todo.TodoBuilder todoBuilder = new Todo.TodoBuilder(etValue.getText().toString())
                             .id(args.getLong(TODO_ID_KEY))
-                            .dueDate(DateUtils.getDateStringFromPicker(dpDueDate))
                             .status(false)
                             .notes(etNotes.getText().toString())
-                            .priority(spPriority.getSelectedItemPosition())
-                            .build();
-                    listener.onFinishEditDialog(args.getInt(TODO_POS_KEY), todo);
+                            .priority(spPriority.getSelectedItemPosition());
+                    if (dpDueDate.getVisibility() == View.VISIBLE) {
+                        todoBuilder.dueDate(getDateStringFromPicker(dpDueDate));
+                    }
+                    listener.onFinishEditDialog(args.getInt(TODO_POS_KEY), todoBuilder.build());
                     // Close the dialog and return back to the parent activity
                     dismiss();
                 }

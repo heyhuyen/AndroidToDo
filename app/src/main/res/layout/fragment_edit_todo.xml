@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/edit_todo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,27 +32,49 @@
     <TextView
         android:id="@+id/tvDueDateLabel"
         android:text="@string/tv_due_date_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etEditTodo"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingRight="5dp"
+        android:paddingBottom="10dp"/>
+
+    <ImageButton
+        android:id="@+id/btnAddDueDate"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etEditTodo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/tvDueDateLabel" />
+
+    <ImageButton
+        android:id="@+id/btnRemoveDueDate"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etEditTodo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/tvDueDateLabel" />
 
     <DatePicker
         android:id="@+id/dpDueDate"
         android:calendarViewShown="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDueDateLabel"
+        android:layout_below="@+id/btnRemoveDueDate"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/tvNotesLabel"
         android:text="@string/tv_notes_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dpDueDate"
+        android:layout_below="@+id/tvDueDateLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -79,7 +102,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvPriorityLabel"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-/>
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

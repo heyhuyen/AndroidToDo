@@ -17,6 +17,10 @@ import com.huyentran.todo.util.DateUtils;
 
 import java.util.Calendar;
 
+import static com.huyentran.todo.util.DateUtils.TODAY;
+import static com.huyentran.todo.util.DateUtils.TOMORROW;
+import static com.huyentran.todo.util.DateUtils.YESTERDAY;
+
 /**
  * Custom ListView row.
  */
@@ -79,14 +83,21 @@ public class ItemView extends RelativeLayout {
             tvDueDate.setText(Constants.EMPTY_STRING);
         } else {
             Calendar dueDate = DateUtils.getDateFromString(dueDateStr);
-            // check if date is past due or today
-            if (DateUtils.isPast(dueDate)) {
+            // check due date relation to today
+            int datePosition = DateUtils.compareToday(dueDate);
+            if (datePosition < TODAY) {
                 tvDueDate.setTextColor(Color.RED);
-            } else if (DateUtils.isToday(dueDate)) {
-                dueDateStr = getResources().getString(R.string.tv_today);
-                tvDueDate.setTextColor(Color.GREEN);
-            } else {
+                if (datePosition == YESTERDAY) {
+                    dueDateStr = getResources().getString(R.string.tv_yesterday);
+                }
+            } else if (datePosition > TODAY) {
                 tvDueDate.setTextColor(Color.DKGRAY);
+                if (datePosition == TOMORROW) {
+                    dueDateStr = getResources().getString(R.string.tv_tomorrow);
+                }
+            } else {
+                tvDueDate.setTextColor(Color.GREEN);
+                dueDateStr = getResources().getString(R.string.tv_today);
             }
             tvDueDate.setText(String.format(getResources().getString(R.string.tv_due_date_label_format), dueDateStr));
         }

@@ -8,11 +8,14 @@
     <string name="tv_due_date_label">Due date:</string>
     <string name="tv_due_date_label_format">Due %s</string>
     <string name="tv_today">today</string>
+    <string name="tv_tomorrow">tomorrow</string>
+    <string name="tv_yesterday">yesterday</string>
     <string name="tv_low">low</string>
     <string name="tv_med">med</string>
     <string name="tv_high">high</string>
     <string name="tv_notes_label">Notes:</string>
     <string name="tv_priority_label">Priority:</string>
+    <string name="tv_none">none</string>
     <string-array name="priority_array">
         <item>@string/tv_low</item>
         <item>@string/tv_med</item>
