@@ -19,7 +19,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "todoDatabase";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Table Names
     private static final String TABLE_TODOS = "todos";
@@ -28,6 +28,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TODO_ID = "id";
     private static final String KEY_TODO_VALUE = "value";
     private static final String KEY_TODO_DUE_DATE = "due_date";
+    private static final String KEY_TODO_STATUS = "status";
 
     public static synchronized TodoDatabaseHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -63,7 +64,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_TODO_ID + " INTEGER PRIMARY KEY," + // Define a primary key
                 KEY_TODO_VALUE + " TEXT," +
-                KEY_TODO_DUE_DATE + " TEXT" +
+                KEY_TODO_DUE_DATE + " TEXT," +
+                KEY_TODO_STATUS + " INTEGER DEFAULT 0" + // 1: complete
                 ")";
 
         db.execSQL(CREATE_POSTS_TABLE);
@@ -100,7 +102,8 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
                     long id = cursor.getLong(cursor.getColumnIndex(KEY_TODO_ID));
                     String value = cursor.getString(cursor.getColumnIndex(KEY_TODO_VALUE));
                     String dueDate = cursor.getString(cursor.getColumnIndex(KEY_TODO_DUE_DATE));
-                    todos.add(new Todo(id, value, dueDate));
+                    boolean status = cursor.getInt(cursor.getColumnIndex(KEY_TODO_STATUS)) == 1;
+                    todos.add(new Todo(id, value, dueDate, status));
                 } while(cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -150,6 +153,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_TODO_VALUE, todo.getValue());
         values.put(KEY_TODO_DUE_DATE, todo.getDueDate());
+        values.put(KEY_TODO_STATUS, todo.getStatus());
 
         return db.update(TABLE_TODOS, values, KEY_TODO_ID + " = ?",
                 new String[] { String.valueOf(todo.getId()) });

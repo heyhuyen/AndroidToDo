@@ -4,7 +4,7 @@ Todo is an android app that allows building a todo list and basic todo items man
 
 Submitted by: Huyen Tran
 
-Time spent: 10 hours spent in total
+Time spent: 12 hours spent in total
 
 ## User Stories
 
@@ -25,7 +25,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Add support for todo item status (exposed via checkbox displayed within listview item)
 
 ## Video Walkthrough 
 

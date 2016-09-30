@@ -29,7 +29,7 @@ import static com.huyentran.todo.MainActivity.TODO_VALUE_KEY;
 public class EditTodoDialogFragment extends DialogFragment {
 
     public interface EditTodoDialogListener {
-        void onFinishEditDialog(int pos, long id, String value, String dueDate);
+        void onFinishEditDialog(int pos, long id, String value, String dueDate, boolean status);
     }
 
     public EditTodoDialogFragment() {
@@ -78,7 +78,8 @@ public class EditTodoDialogFragment extends DialogFragment {
                     listener.onFinishEditDialog(args.getInt(TODO_POS_KEY),
                             args.getLong(TODO_ID_KEY),
                             etValue.getText().toString(),
-                            DateUtils.getDateStringFromPicker(dpDueDate));
+                            DateUtils.getDateStringFromPicker(dpDueDate),
+                            false);
                     // Close the dialog and return back to the parent activity
                     dismiss();
                 }

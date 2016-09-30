@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.huyentran.todo.MainActivity;
 import com.huyentran.todo.model.Todo;
 
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ public class TodosAdapter extends ArrayAdapter<Todo> {
         ItemView itemView = (ItemView) convertView;
         if (null == itemView)
             itemView = ItemView.inflate(parent);
-        itemView.setItem(getItem(position));
+        itemView.setItem(position, getItem(position),
+                (MainActivity) getContext()); // this may be questionable according to SO
         return itemView;
     }
 }

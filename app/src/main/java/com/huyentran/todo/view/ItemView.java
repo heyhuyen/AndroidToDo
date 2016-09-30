@@ -1,11 +1,12 @@
 package com.huyentran.todo.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,14 +15,18 @@ import com.huyentran.todo.model.Todo;
 import com.huyentran.todo.util.DateUtils;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Custom ListView row.
  */
 public class ItemView extends RelativeLayout {
+    private CheckBox cbStatus;
     private TextView tvValue;
     private TextView tvDueDate;
+
+    public interface ItemViewListener {
+        void onItemViewCheckBoxToggle(int pos);
+    }
 
     public ItemView(Context c) {
         this(c, null);
@@ -42,8 +47,20 @@ public class ItemView extends RelativeLayout {
                 .inflate(R.layout.item_view, parent, false);
     }
 
-    public void setItem(Todo item) {
+    public void setItem(final int pos, Todo item, final ItemViewListener listener) {
+        // todo value
         tvValue.setText(item.getValue());
+
+        // checkbox
+        cbStatus.setChecked(item.getStatus());
+        cbStatus.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemViewCheckBoxToggle(pos);
+            }
+        });
+
+        // due date
         String dueDateStr = item.getDueDate();
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
             Calendar dueDate = DateUtils.getDateFromString(dueDateStr);
@@ -71,6 +88,7 @@ public class ItemView extends RelativeLayout {
 
     private void setupChildren() {
         tvValue = (TextView) findViewById(R.id.tvValue);
+        cbStatus = (CheckBox) findViewById(R.id.cbStatus);
         tvDueDate = (TextView) findViewById(R.id.tvDueDate);
     }
 }
