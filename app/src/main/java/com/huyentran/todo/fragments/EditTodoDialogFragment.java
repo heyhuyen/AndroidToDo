@@ -1,4 +1,4 @@
-package com.huyentran.todo;
+package com.huyentran.todo.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,14 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import com.huyentran.todo.model.Todo;
-import com.huyentran.todo.util.DateUtils;
+import com.huyentran.todo.R;
+import com.huyentran.todo.models.Todo;
+import com.huyentran.todo.utils.DateUtils;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static com.huyentran.todo.util.Constants.*;
-import static com.huyentran.todo.util.DateUtils.getDateStringFromPicker;
+import static com.huyentran.todo.utils.Constants.*;
+import static com.huyentran.todo.utils.DateUtils.getDateStringFromPicker;
 
 /**
  * {@link DialogFragment} using {@link AlertDialog} for editing todo items in a modal view.

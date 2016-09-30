@@ -1,4 +1,4 @@
-package com.huyentran.todo.view;
+package com.huyentran.todo.views;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,15 +11,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.huyentran.todo.R;
-import com.huyentran.todo.model.Todo;
-import com.huyentran.todo.util.Constants;
-import com.huyentran.todo.util.DateUtils;
+import com.huyentran.todo.models.Todo;
+import com.huyentran.todo.utils.Constants;
+import com.huyentran.todo.utils.DateUtils;
 
 import java.util.Calendar;
 
-import static com.huyentran.todo.util.DateUtils.TODAY;
-import static com.huyentran.todo.util.DateUtils.TOMORROW;
-import static com.huyentran.todo.util.DateUtils.YESTERDAY;
+import static com.huyentran.todo.utils.DateUtils.TODAY;
+import static com.huyentran.todo.utils.DateUtils.TOMORROW;
+import static com.huyentran.todo.utils.DateUtils.YESTERDAY;
 
 /**
  * Custom ListView row.

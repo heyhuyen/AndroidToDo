@@ -1,4 +1,4 @@
-package com.huyentran.todo.util;
+package com.huyentran.todo.utils;
 
 /**
  * Shared constants

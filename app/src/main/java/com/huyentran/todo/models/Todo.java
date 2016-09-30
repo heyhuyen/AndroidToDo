@@ -1,4 +1,4 @@
-package com.huyentran.todo.model;
+package com.huyentran.todo.models;
 
 /**
  * Todo model.

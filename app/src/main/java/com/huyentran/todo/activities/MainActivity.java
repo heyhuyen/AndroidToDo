@@ -1,4 +1,4 @@
-package com.huyentran.todo;
+package com.huyentran.todo.activities;
 
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -9,11 +9,13 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.huyentran.todo.R;
 import com.huyentran.todo.db.TodoDatabaseHelper;
-import com.huyentran.todo.model.Todo;
-import com.huyentran.todo.util.Constants;
-import com.huyentran.todo.view.ItemView;
-import com.huyentran.todo.view.TodosAdapter;
+import com.huyentran.todo.fragments.EditTodoDialogFragment;
+import com.huyentran.todo.models.Todo;
+import com.huyentran.todo.utils.Constants;
+import com.huyentran.todo.views.ItemView;
+import com.huyentran.todo.adapters.TodosAdapter;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.huyentran.todo.view;
+package com.huyentran.todo.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.huyentran.todo.MainActivity;
-import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.activities.MainActivity;
+import com.huyentran.todo.models.Todo;
+import com.huyentran.todo.views.ItemView;
 
 import java.util.ArrayList;
 

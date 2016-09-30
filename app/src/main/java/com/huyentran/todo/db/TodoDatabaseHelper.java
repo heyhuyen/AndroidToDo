@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.huyentran.todo.model.Todo;
+import com.huyentran.todo.models.Todo;
 
 import java.util.ArrayList;
 import java.util.List;
