@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/tvValue"
         android:text="Value"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_small"
         android:textStyle="normal|bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:id="@+id/tvDueDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_xsmall"
         android:textStyle="normal|italic"
         android:layout_below="@+id/cbStatus" />
 
