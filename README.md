@@ -4,7 +4,7 @@ Todo is an android app that allows building a todo list and basic todo items man
 
 Submitted by: Huyen Tran
 
-Time spent: 16 hours spent in total
+Time spent: 18 hours spent in total
 
 ## User Stories
 
@@ -23,7 +23,7 @@ The following **optional** features are implemented:
 ** today/yesterday/tomorrow replaces the date string if appropriate in the list view item
 * [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [x] Add support for selecting the priority of each todo item (and display in listview item)
-* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+* [] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
 
@@ -43,6 +43,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 Describe any challenges encountered while building the app.
+I think I have the most trouble with styling and getting the look and feel I want particularly layouts (alignment and positioning).
 
 ## License
 

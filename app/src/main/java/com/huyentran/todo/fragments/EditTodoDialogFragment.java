@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.huyentran.todo.utils.DateUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import static com.huyentran.todo.R.id.spPriority;
 import static com.huyentran.todo.utils.Constants.*;
 import static com.huyentran.todo.utils.DateUtils.getDateStringFromPicker;
 
@@ -71,6 +73,19 @@ public class EditTodoDialogFragment extends DialogFragment
         etValue.setText(value);
         etValue.setSelection(value.length());
 
+        // setup priority spinner
+        final Spinner spPriority = (Spinner) dialogView.findViewById(R.id.spPriority);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.priority_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPriority.setAdapter(adapter);
+        spPriority.setSelection(args.getInt(TODO_PRIORITY_KEY));
+
+        // Setup notes field
+        final EditText etNotes = (EditText) dialogView.findViewById(R.id.etTodoNotes);
+        etNotes.setText(args.getString(TODO_NOTES_KEY));
+        etNotes.setMovementMethod(new ScrollingMovementMethod());
+
         // Setup due date items
         final ImageButton btnAddDueDate = (ImageButton) dialogView.findViewById(R.id.btnAddDueDate);
         final ImageButton btnRemoveDueDate = (ImageButton) dialogView.findViewById(R.id.btnRemoveDueDate);
@@ -110,18 +125,6 @@ public class EditTodoDialogFragment extends DialogFragment
             dpDueDate.updateDate(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
                     dueDate.get(Calendar.DAY_OF_MONTH));
         }
-
-        // Setup notes field
-        final EditText etNotes = (EditText) dialogView.findViewById(R.id.etTodoNotes);
-        etNotes.setText(args.getString(TODO_NOTES_KEY));
-
-        // setup priority spinner
-        final Spinner spPriority = (Spinner) dialogView.findViewById(R.id.spPriority);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.priority_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spPriority.setAdapter(adapter);
-        spPriority.setSelection(args.getInt(TODO_PRIORITY_KEY));
 
         // alert dialog buttons
         alertDialogBuilder.setPositiveButton(R.string.btn_save, new DialogInterface.OnClickListener() {

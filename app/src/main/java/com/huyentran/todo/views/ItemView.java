@@ -1,7 +1,7 @@
 package com.huyentran.todo.views;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,17 +86,18 @@ public class ItemView extends RelativeLayout {
             // check due date relation to today
             int datePosition = DateUtils.compareToday(dueDate);
             if (datePosition < TODAY) {
-                tvDueDate.setTextColor(Color.RED);
+                tvDueDate.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 if (datePosition == YESTERDAY) {
                     dueDateStr = getResources().getString(R.string.tv_yesterday);
                 }
             } else if (datePosition > TODAY) {
-                tvDueDate.setTextColor(Color.DKGRAY);
+                tvDueDate.setTextColor(ContextCompat.getColor(getContext(), R.color.colorText));
                 if (datePosition == TOMORROW) {
+                    tvDueDate.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                     dueDateStr = getResources().getString(R.string.tv_tomorrow);
                 }
             } else {
-                tvDueDate.setTextColor(Color.GREEN);
+                tvDueDate.setTextColor(ContextCompat.getColor(getContext(), R.color.colorOrange));
                 dueDateStr = getResources().getString(R.string.tv_today);
             }
             tvDueDate.setText(String.format(getResources().getString(R.string.tv_due_date_label_format), dueDateStr));
@@ -107,15 +108,15 @@ public class ItemView extends RelativeLayout {
         switch (todo.getPriority()) {
             case (Todo.PRIORITY_HI):
                 tvPriority.setText(getResources().getString(R.string.tv_high));
-                tvPriority.setTextColor(Color.RED);
+                tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 break;
             case (Todo.PRIORITY_MED):
                 tvPriority.setText(getResources().getString(R.string.tv_med));
-                tvPriority.setTextColor(Color.YELLOW);
+                tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorOrange));
                 break;
             default:
                 tvPriority.setText(getResources().getString(R.string.tv_low));
-                tvPriority.setTextColor(Color.GREEN);
+                tvPriority.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                 break;
         }
     }
