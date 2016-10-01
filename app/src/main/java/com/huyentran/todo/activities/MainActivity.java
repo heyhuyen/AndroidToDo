@@ -14,6 +14,7 @@ import com.huyentran.todo.db.TodoDatabaseHelper;
 import com.huyentran.todo.fragments.EditTodoDialogFragment;
 import com.huyentran.todo.models.Todo;
 import com.huyentran.todo.utils.Constants;
+import com.huyentran.todo.utils.StringUtils;
 import com.huyentran.todo.views.ItemView;
 import com.huyentran.todo.adapters.TodosAdapter;
 
@@ -49,7 +50,9 @@ public class MainActivity extends AppCompatActivity
     public void onAddTodo(View view) {
         EditText etNewTodo = (EditText) findViewById(R.id.etNewTodo);
         String value = etNewTodo.getText().toString();
-        // todo: check for blank values
+        if (StringUtils.isBlank(value)) {
+            return;
+        }
         Todo newTodo = new Todo(value);
         long id = todoDatabaseHelper.addTodo(newTodo);
         newTodo.setId(id);

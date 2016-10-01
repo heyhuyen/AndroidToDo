@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import com.huyentran.todo.R;
 import com.huyentran.todo.models.Todo;
 import com.huyentran.todo.utils.DateUtils;
+import com.huyentran.todo.utils.StringUtils;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -133,7 +134,11 @@ public class EditTodoDialogFragment extends DialogFragment
                     // Return input text back to activity through the implemented listener
                     EditTodoDialogListener listener = (EditTodoDialogListener) getActivity();
                     Bundle args = getArguments();
-                    Todo.TodoBuilder todoBuilder = new Todo.TodoBuilder(etValue.getText().toString())
+                    String newValue = etValue.getText().toString();
+                    if (StringUtils.isBlank(newValue)) {
+                        return;
+                    }
+                    Todo.TodoBuilder todoBuilder = new Todo.TodoBuilder(newValue)
                             .id(args.getLong(TODO_ID_KEY))
                             .status(false)
                             .notes(etNotes.getText().toString())
