@@ -19,8 +19,8 @@ The following **optional** features are implemented:
 * [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [x] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [x] Add support for completion due dates for todo items (and display within listview item)
-** User can add or remove due dates
-** today/yesterday/tomorrow replaces the date string if appropriate in the list view item
+* User can add or remove due dates
+* today/yesterday/tomorrow replaces the date string if appropriate in the list view item
 * [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [x] Add support for selecting the priority of each todo item (and display in listview item)
 * [] Tweak the style improving the UI / UX, play with colors, images or backgrounds
@@ -28,15 +28,15 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Add support for todo status
-** exposed via checkbox displayed within listview item
-** editing disabled for checked items (click does nothing, but long click to delete still enabled)
+* exposed via checkbox displayed within listview item
+* editing disabled for checked items (click does nothing, but long click to delete still enabled)
 * [x] Add notes field for todo item
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://imgur.com/K0TcOft.gif' title='Video Walkthrough' width='400px' alt='Video Walkthrough' />
+<img src='http://imgur.com/a/igQjU.gif' title='Video Walkthrough' width='400px' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
